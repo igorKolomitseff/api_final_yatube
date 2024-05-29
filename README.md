@@ -77,10 +77,18 @@ POST-запрос на получение JWT-токена
 ```
 api/v1/jwt/create/
 ```
+Request:
 ```json
 {
   "username": "Igor_K",
   "password": "qwerty12345"
+}
+```
+Response:
+```json
+{
+  "refresh": "string",
+  "access": "string"
 }
 ```
 
@@ -88,6 +96,7 @@ GET-запрос на получение публикации
 ```
 api/v1/posts/{id}/
 ```
+Response:
 ```json
 {
   "id": 1,
@@ -103,11 +112,23 @@ POST-запрос на создание публикации
 ```
 api/v1/posts/{id}/
 ```
+Request:
 ```json
 {
   "text": "some new text",
   "image": "<binary string>",
-  "group": 0
+  "group": 1
+}
+```
+Response:
+```json
+{
+  "id": 2,
+  "author": "Igor_K",
+  "text": "some new text",
+  "pub_date": "2019-08-24T14:15:22Z",
+  "image": "string",
+  "group": 1
 }
 ```
 
@@ -115,6 +136,7 @@ GET-запрос на получение комментариев
 ```
 api/v1/posts/{post_id}/comments/
 ```
+Response:
 ```json
 [
   {
@@ -131,9 +153,20 @@ POST-запрос на добавление комментария
 ```
 api/v1/posts/{post_id}/comments/
 ```
+Request:
 ```json
 {
   "text": "new text"
+}
+```
+Response:
+```json
+{
+  "id": 2,
+  "author": "Igor_K",
+  "text": "new text",
+  "created": "2019-08-24T14:15:22Z",
+  "post": 1
 }
 ```
 
@@ -141,6 +174,7 @@ GET-запрос на получение списка доступных соо�
 ```
 api/v1/groups/
 ```
+Response:
 ```json
 [
   {
@@ -156,11 +190,12 @@ GET-запрос на получение подписок пользовател
 ```
 api/v1/follow/  
 ```
+Response:
 ```json
 [
   {
-    "user": "string",
-    "following": "string"
+    "user": "Igor_K",
+    "following": "some user"
   }
 ]
 ```
@@ -169,8 +204,16 @@ POST-запрос на подписку пользователя, сделавш
 ```
 api/v1/follow/ 
 ```
+Request:
 ```json
 {
+  "following": "new user"
+}
+```
+Response:
+```json
+{
+  "user": "Igor_K",
   "following": "new user"
 }
 ```
