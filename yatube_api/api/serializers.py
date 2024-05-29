@@ -11,10 +11,14 @@ class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
         if isinstance(data, str) and data.startswith('data:image'):
             format, encoded = data.split(';base64,')
-        return super().to_internal_value(
-            ContentFile(
-                base64.b64decode(encoded), name='temp.' + format.split('/')[-1]
+            return super().to_internal_value(
+                ContentFile(
+                    base64.b64decode(encoded),
+                    name='temp.' + format.split('/')[-1]
+                )
             )
+        raise serializers.ValidationError(
+            'Это поле ожидает изображение в формате Base64.'
         )
 
 
