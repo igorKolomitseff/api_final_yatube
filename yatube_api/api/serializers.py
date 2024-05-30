@@ -1,25 +1,6 @@
-import base64
-
-from django.core.files.base import ContentFile
 from rest_framework import serializers
 
 from posts.models import Comment, Follow, Group, Post, User
-
-
-class Base64ImageField(serializers.ImageField):
-
-    def to_internal_value(self, data):
-        if isinstance(data, str) and data.startswith('data:image'):
-            format, encoded = data.split(';base64,')
-            return super().to_internal_value(
-                ContentFile(
-                    base64.b64decode(encoded),
-                    name='temp.' + format.split('/')[-1]
-                )
-            )
-        raise serializers.ValidationError(
-            'Ошибка: это поле ожидает изображение в формате Base64.'
-        )
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -33,7 +14,6 @@ class PostSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
         slug_field='username', read_only=True
     )
-    image = Base64ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Post
