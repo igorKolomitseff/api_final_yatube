@@ -18,7 +18,7 @@ class Base64ImageField(serializers.ImageField):
                 )
             )
         raise serializers.ValidationError(
-            'Это поле ожидает изображение в формате Base64.'
+            'Ошибка: это поле ожидает изображение в формате Base64.'
         )
 
 
