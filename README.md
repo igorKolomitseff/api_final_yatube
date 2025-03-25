@@ -1,219 +1,72 @@
-# API Yatube
+# Yatube - платформа для блогов (часть 2)
 
-Yatube — это платформа для блогов. Сервис предлагает возможность зарегистрироваться, создать, отредактировать или удалить собственный пост, прокомментировать пост другого автора и подписаться на него.
+Проект является финальным этапом разработки API Yatube. 
+Предназначен для изучения библиотеки Django REST Framework (DRF).
 
-## Основные зависимости:
-* Python = 3.9
-* Django = 3.2
+## Функции проекта
 
-Проект реализован с использованием JWT-токенов.
+* Выкладывание публикаций, работа с публикациями (редактирование, удаление).
+* Комментирование публикаций, работа с комментариями (редактирование, удаление).
+* Подписка на пользователей, получение подписок пользователя, сделавшего запрос.
+* Доступны сообщества, только для просмотра.
+* Редактировать и удалять публикации и комментарии может только автор.
+* Приложение работает на основе REST API, аутентификация осуществляется при 
+помощи JWT-токена. Для неаутентифицированных пользователей доступ к API только 
+на чтение.
 
-### Как запустить проект:
+## Стек технологий
+* [Python](https://www.python.org/)
+* [Django](https://www.djangoproject.com/)
+* [DRF](https://www.django-rest-framework.org/)
+* [Djoser](https://djoser.readthedocs.io/en/latest/getting_started.html)
+* [SQLite](https://www.sqlite.org/)
 
-Клонировать репозиторий и перейти в него в командной строке:
-
-``` 
-git@github.com:igorKolomitseff/api_final_yatube.git
-```
-
-```
+## Как развернуть проект
+1. Клонируйте репозиторий и перейдите в директорию api_final_yatube:
+```bash
+git clone git@github.com:igorKolomitseff/api_final_yatube.git
 cd api_final_yatube
 ```
 
-Cоздать и активировать виртуальное окружение:
-
-``` 
+2. Создайте виртуальное окружение и активируйте его:
+```bash
 python3 -m venv venv
+source venv/bin/activate  # Для Linux и macOS
+source venv/Scripts/activate  # Для Windows
 ```
 
-```
-source venv/bin/activate
-```
-
-Установить зависимости из файла requirements.txt:
-
-```
+3. Обновите pip и установите зависимости проекта:
+```bash
 python3 -m pip install --upgrade pip
-```
-
-```
 pip install -r requirements.txt
 ```
 
-Выполнить миграции:
-
-```
+4. Перейдите в директорию yatube_api и примените миграции:
+```bash
+cd yatube_api/
 python3 manage.py migrate
 ```
 
-Запустить проект:
+5. Создайте суперпользователя, укажите запрашиваемые данные:
+```bash
+python3 manage.py createsuperuser
+```
 
-``` 
+6. Запустите проект:
+```bash
 python3 manage.py runserver
 ```
 
-Документация к проекту **API Yatube** в формате **Redoc** доступна по адресу:
-```
-http://127.0.0.1:8000/redoc/
-```
+## Документация API
 
-### Доступные эндпоинты
-```
-api/v1/jwt/create/
-api/v1/jwt/refresh/
-api/v1/jwt/verify/
-api/v1/posts/
-api/v1/posts/{id}/
-api/v1/posts/{post_id}/comments/
-api/v1/posts/{post_id}/comments/{id}/
-api/v1/groups/
-api/v1/groups/{id}/
-api/v1/follow/
-```
+Техническая документация к API доступна при запущенном проекте по ссылке:
 
-### Примеры запросов к API
+* [ReDoc](http://127.0.0.1:8000/redoc/)
 
-POST-запрос на получение JWT-токена
-```
-api/v1/jwt/create/
-```
-Request:
-```json
-{
-  "username": "Igor_K",
-  "password": "qwerty12345"
-}
-```
-Response:
-```json
-{
-  "refresh": "string",
-  "access": "string"
-}
-```
+Документация без развёртывания проекта:
 
-GET-запрос на получение публикации
-```
-api/v1/posts/{id}/
-```
-Response:
-```json
-{
-  "id": 1,
-  "author": "Igor_K",
-  "text": "some text",
-  "pub_date": "2019-08-24T14:15:22Z",
-  "image": "string",
-  "group": 3
-}
-```
+[Техническая документация к API](https://github.com/igorKolomitseff/api_final_yatube/blob/master/yatube_api/static/redoc.yaml)
 
-POST-запрос на создание публикации
-```
-api/v1/posts/{id}/
-```
-Request:
-```json
-{
-  "text": "some new text",
-  "image": "<binary string>",
-  "group": 1
-}
-```
-Response:
-```json
-{
-  "id": 2,
-  "author": "Igor_K",
-  "text": "some new text",
-  "pub_date": "2019-08-24T14:15:22Z",
-  "image": "string",
-  "group": 1
-}
-```
+### Автор
 
-GET-запрос на получение комментариев
-```
-api/v1/posts/{post_id}/comments/
-```
-Response:
-```json
-[
-  {
-    "id": 1,
-    "author": "Simple_man",
-    "text": "text",
-    "created": "2019-08-24T14:15:22Z",
-    "post": 1
-  }
-]
-```
-
-POST-запрос на добавление комментария
-```
-api/v1/posts/{post_id}/comments/
-```
-Request:
-```json
-{
-  "text": "new text"
-}
-```
-Response:
-```json
-{
-  "id": 2,
-  "author": "Igor_K",
-  "text": "new text",
-  "created": "2019-08-24T14:15:22Z",
-  "post": 1
-}
-```
-
-GET-запрос на получение списка доступных сообществ.
-```
-api/v1/groups/
-```
-Response:
-```json
-[
-  {
-    "id": 0,
-    "title": "string",
-    "slug": "^-$",
-    "description": "string"
-  }
-]
-```
-
-GET-запрос на получение подписок пользователя, сделавшего запрос
-```
-api/v1/follow/  
-```
-Response:
-```json
-[
-  {
-    "user": "Igor_K",
-    "following": "some user"
-  }
-]
-```
-
-POST-запрос на подписку пользователя, сделавшего запрос
-```
-api/v1/follow/ 
-```
-Request:
-```json
-{
-  "following": "new user"
-}
-```
-Response:
-```json
-{
-  "user": "Igor_K",
-  "following": "new user"
-}
-```
+[Игорь Коломыцев](https://github.com/igorKolomitseff)
